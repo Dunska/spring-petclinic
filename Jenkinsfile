@@ -4,7 +4,13 @@ pipeline {
     stage('Build & Unit Tests') {
       steps {
         node(label: 'build') {
-          sleep 5
+          withMaven(
+        maven: 'M3') {
+
+      // Run the maven build
+      sh "mvn clean install"
+
+    }
         }
 
       }
