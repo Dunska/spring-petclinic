@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
   stages {
     stage('Build & Unit Tests') {
       steps {
@@ -11,6 +11,7 @@ pipeline {
       sh "mvn clean install"
 
     }
+stash(name: 'binaries', includes: 'target/\\*.jar')
         }
 
       }
@@ -52,10 +53,8 @@ pipeline {
     }
     stage('Staging') {
       steps {
-        node(label: 'build') {
-          sleep 5
-        }
-
+        unstash 'binaries'
+        sh('ls -l target')
       }
     }
     stage('Mise en Prod') {
